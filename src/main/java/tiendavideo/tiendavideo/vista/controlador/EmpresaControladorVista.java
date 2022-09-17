@@ -1,5 +1,10 @@
 package tiendavideo.tiendavideo.vista.controlador;
 
+import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,11 +14,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import tiendavideo.tiendavideo.modelo.Empresa;
+import tiendavideo.tiendavideo.modelo.Pais;
 import tiendavideo.tiendavideo.modelo.Usuario;
 import tiendavideo.tiendavideo.vista.servicio.EmpresaServicioVista;
+import tiendavideo.tiendavideo.vista.servicio.PaisServicioVista;
 
 @Controller
 @RequestMapping("/empresa")
@@ -21,6 +29,8 @@ public class EmpresaControladorVista {
 
     @Autowired
     EmpresaServicioVista servicioEmpresa;
+    @Autowired
+    PaisServicioVista servicioPais;
 
     @GetMapping("/listar/{pagina}/{tamaño}")
     public String listar(@PathVariable int pagina, @PathVariable int tamaño,
@@ -30,9 +40,33 @@ public class EmpresaControladorVista {
             Page<Empresa> paginaActual = servicioEmpresa.listarPagina(PageRequest.of(pagina - 1, tamaño), usuario);
 
             modelo.addAttribute("paginaActual", paginaActual);
-        }
+            List<Integer> numerosPaginas = IntStream.rangeClosed(1, paginaActual.getTotalPages())
+                    .boxed()
+                    .collect(Collectors.toList());
 
-        return "empresa";
+            modelo.addAttribute("numerosPaginas", numerosPaginas);
+        }
+        modelo.addAttribute("plantilla", "empresa");
+        modelo.addAttribute("menu", InicioControladorVista.generarMenu());
+        modelo.addAttribute("empresaeditada", new Empresa());
+        return "inicio";
+    }
+
+
+    @GetMapping("/editar/{id}")
+    public String editar(@PathVariable long id, Model modelo, HttpSession sesion){
+        Usuario usuario = (Usuario) sesion.getAttribute("usuario");
+        servicioPais.listar(usuario);
+
+        modelo.addAttribute("listapaises", servicioPais.getLista());
+        modelo.addAttribute("empresaeditada", new Empresa());
+        return "empresaeditar";
+    }
+
+
+    @PostMapping("/empresa/guardar")
+    public String guardar(){
+        return "";
     }
 
 }

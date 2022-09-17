@@ -55,12 +55,11 @@ public class EmpresaServicioVista {
             lista = Collections.emptyList();
         } else {
             int posicionFinal = Math.min(posicionInicial + tamañoPagina, empresas.size());
-            lista = empresas.subList(posicionFinal, posicionFinal);
+            lista = empresas.subList(posicionInicial, posicionFinal);
         }
 
         Page<Empresa> empresasPage = new PageImpl<Empresa>(lista, PageRequest.of(paginaActual, tamañoPagina),
                 empresas.size());
-
         return empresasPage;
     }
 
