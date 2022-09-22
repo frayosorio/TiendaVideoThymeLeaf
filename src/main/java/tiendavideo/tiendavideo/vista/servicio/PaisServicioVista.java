@@ -42,5 +42,4 @@ public class PaisServicioVista {
         paises = Arrays.asList(response.getBody());
     }
 
-
 }

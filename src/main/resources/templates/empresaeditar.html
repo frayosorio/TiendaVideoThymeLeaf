@@ -20,7 +20,7 @@
                     <div class="form-group" style="width:100%">
                         <label th:text="#{Diseño.Empresas.TituloCampo3}" />
                         <select class="form-control" th:field="*{pais}" name="pais" id="pais">
-                            <option th:each="pais: ${listapaises}" th:text="${pais.pais}" th:value="${pais.id}">
+                            <option th:each="itemPais: ${listapaises}" th:text="${itemPais.codigoalfa2}+'-'+${itemPais.pais}" th:value="${itemPais.id}">
                             </option>
                         </select>
                     </div>

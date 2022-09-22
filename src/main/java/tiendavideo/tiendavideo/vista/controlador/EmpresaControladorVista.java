@@ -13,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -52,21 +53,30 @@ public class EmpresaControladorVista {
         return "inicio";
     }
 
-
     @GetMapping("/editar/{id}")
-    public String editar(@PathVariable long id, Model modelo, HttpSession sesion){
+    public String editar(@PathVariable long id, Model modelo, HttpSession sesion) {
         Usuario usuario = (Usuario) sesion.getAttribute("usuario");
         servicioPais.listar(usuario);
+        Empresa empresa = new Empresa();
+        if (id > 0) {
+            empresa = servicioEmpresa.obtener(id, usuario);
+        }
 
         modelo.addAttribute("listapaises", servicioPais.getLista());
-        modelo.addAttribute("empresaeditada", new Empresa());
+        modelo.addAttribute("empresaeditada", empresa);
         return "empresaeditar";
     }
 
+    @PostMapping("/guardar")
+    public String guardar(@ModelAttribute("empresaeditada") Empresa empresa, HttpSession sesion) {
+        Usuario usuario = (Usuario) sesion.getAttribute("usuario");
+        empresa = servicioEmpresa.guardar(empresa, usuario);
+        servicioEmpresa.listar(usuario);
+        int pagina = servicioEmpresa.encontrarPagina(empresa.getId(),
+                InicioControladorVista.TAMAÑO_PAGINA);
 
-    @PostMapping("/empresa/guardar")
-    public String guardar(){
-        return "";
+        String ruta = "redirect:/empresa/listar/" + pagina + "/" + InicioControladorVista.TAMAÑO_PAGINA;
+        return ruta;
     }
 
 }

@@ -4,6 +4,9 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.IntStream;
+
+import javax.swing.text.html.FormSubmitEvent.MethodType;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -61,6 +64,45 @@ public class EmpresaServicioVista {
         Page<Empresa> empresasPage = new PageImpl<Empresa>(lista, PageRequest.of(paginaActual, tamañoPagina),
                 empresas.size());
         return empresasPage;
+    }
+
+    public Empresa guardar(Empresa empresa, Usuario usuario) {
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = obtenerHeader(usuario);
+
+        HttpEntity<Empresa> request = new HttpEntity<Empresa>(empresa, headers);
+
+        ResponseEntity<Empresa> response;
+        String url;
+        if (empresa.getId() == 0) {
+            url = urlBase + "/agregar";
+            response = restTemplate.exchange(url, HttpMethod.POST, request, Empresa.class);
+        } else {
+            url = urlBase + "/modificar";
+            response = restTemplate.exchange(url, HttpMethod.PUT, request, Empresa.class);
+        }
+        return response.getBody();
+
+    }
+
+    public int encontrarPagina(long id, int tamañoPagina) {
+        int indice = IntStream.range(0, empresas.size())
+                .filter(i -> empresas.get(i).getId() == id)
+                .findFirst()
+                .orElse(-1);
+
+        int pagina = (int) (indice / tamañoPagina) + 1;
+        return pagina;
+    }
+
+    public Empresa obtener(long id, Usuario usuario) {
+        String url = urlBase + "/obtener/" + id;
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = obtenerHeader(usuario);
+        HttpEntity<String> request = new HttpEntity<String>(headers);
+
+        ResponseEntity<Empresa> response = restTemplate.exchange(url, HttpMethod.GET, request, Empresa.class);
+        return response.getBody();
     }
 
 }
