@@ -4,7 +4,7 @@
             <button class="btn btn-info" type="button" id="barralateralColapsar" th:onclick="barraLateralColapsar();">
                 <i class="fas fa-bars"></i>
             </button>
-            <a class="nav-link fas fa-home fa-2x" th:href="@{/}"></a>
+            <a class="nav-link fas fa-home fa-2x titulo" th:href="@{/}"></a>
             <b class="titulo" th:text="#{Diseño.Titulo}"></b>
         </div>
         <div th:if="${session.usuario==null}">

@@ -1,10 +1,6 @@
 <nav id="moduloempresa" th:fragment="modulo-empresa">
     <h2><b th:text="#{Diseño.Empresas.Titulo}"></b></h2>
 
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#empresaeditar" data-id="0">
-        Agregar
-    </button>
-
     <div th:insert="empresaeditar :: modulo-empresaeditar"> </div>
     <div th:insert="decidir :: modulo-decidir"> </div>
 
@@ -14,6 +10,12 @@
             <th th:text="#{Diseño.Empresas.TituloCampo1}" />
             <th th:text="#{Diseño.Empresas.TituloCampo2}" />
             <th th:text="#{Diseño.Empresas.TituloCampo3}" />
+            <th>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#empresaeditar"
+                    data-id="0">
+                    Agregar
+                </button>
+            </th>
         </thead>
         <tbody>
             <tr th:each="empresa, tipoFila : ${paginaActual.content}" th:style="${tipoFila.odd}? 'font-weight: bold;'">
@@ -25,8 +27,6 @@
                         th:data-id="${empresa.id}">
                         <i class="fa fa-edit"></i>
                     </button>
-                </td>
-                <td>
                     <button class="btn btn-danger" data-toggle="modal" data-target="#decidir"
                         th:attr="data-ruta='/empresa/eliminar/'+${empresa.id}">
                         <i class="fa fa-trash"></i>
