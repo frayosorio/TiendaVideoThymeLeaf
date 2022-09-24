@@ -48,11 +48,11 @@ public class EmpresaControladorVista {
 
             modelo.addAttribute("numerosPaginas", numerosPaginas);
             modelo.addAttribute("plantilla", "empresa");
-        }
-        else{
+            sesion.setAttribute("numeroPaginaActual", paginaActual.getNumber() + 1);
+        } else {
             modelo.addAttribute("plantilla", "presentacion");
             modelo.addAttribute("mensajeerror", "usuario no logueado");
-        } 
+        }
         modelo.addAttribute("menu", InicioControladorVista.generarMenu());
         modelo.addAttribute("empresaeditada", new Empresa());
         modelo.addAttribute("login", new Login());
@@ -81,6 +81,20 @@ public class EmpresaControladorVista {
         int pagina = servicioEmpresa.encontrarPagina(empresa.getId(),
                 InicioControladorVista.TAMAÑO_PAGINA);
 
+        String ruta = "redirect:/empresa/listar/" + pagina + "/" + InicioControladorVista.TAMAÑO_PAGINA;
+        return ruta;
+    }
+
+    @GetMapping("/eliminar/{id}")
+    public String eliminar(@PathVariable long id, Model modelo, HttpSession sesion,
+            RedirectAttributes redirectAttributes) {
+        Usuario usuario = (Usuario) sesion.getAttribute("usuario");
+        if (servicioEmpresa.eliminar(id, usuario)) {
+            servicioEmpresa.listar(usuario);
+        } else {
+            redirectAttributes.addFlashAttribute("mensajeerror", "No se pudo eliminar la Empresa");
+        }
+        int pagina = (int) sesion.getAttribute("numeroPaginaActual");
         String ruta = "redirect:/empresa/listar/" + pagina + "/" + InicioControladorVista.TAMAÑO_PAGINA;
         return ruta;
     }

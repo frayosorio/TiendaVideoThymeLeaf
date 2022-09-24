@@ -55,5 +55,11 @@
                 $("#empresaeditar").find(".modal-content").html(contenidoModal);
             });
         });
+
+        $("#decidir").on("show.bs.modal", function (event) {
+            var ruta = $(event.relatedTarget).data("ruta");
+            $("#decidir").find("#btnAceptar").attr("href", ruta);
+        });
+
     </script>
 </nav>

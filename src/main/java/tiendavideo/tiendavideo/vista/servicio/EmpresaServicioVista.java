@@ -105,4 +105,19 @@ public class EmpresaServicioVista {
         return response.getBody();
     }
 
+    public boolean eliminar(long id, Usuario usuario) {
+        String url = urlBase + "/eliminar/" + id;
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = obtenerHeader(usuario);
+        HttpEntity<String> request = new HttpEntity<String>(headers);
+
+        try{
+            ResponseEntity<Boolean> response = restTemplate.exchange(url, HttpMethod.DELETE, request, Boolean.class);
+            return response.getBody();
+        }
+        catch(Exception ex){
+            return false;
+        }
+    }
+
 }
