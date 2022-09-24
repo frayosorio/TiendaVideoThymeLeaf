@@ -44,8 +44,13 @@ public class PaisControlador {
     }
 
     @RequestMapping(value = "/eliminar/{id}", method = RequestMethod.DELETE)
-    public void eliminar(@PathVariable long id) {
-        repositorio.deleteById(id);
+    public boolean eliminar(@PathVariable long id) {
+        try {
+            repositorio.deleteById(id);
+            return true;
+        } catch (Exception ex) {
+            return false;
+        }
     }
 
 }

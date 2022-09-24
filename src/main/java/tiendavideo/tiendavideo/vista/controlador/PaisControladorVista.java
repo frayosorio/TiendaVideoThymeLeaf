@@ -79,7 +79,7 @@ public class PaisControladorVista {
                 modelo.addAttribute("numerosPaginas", numerosPaginas);
             }
         }
-        modelo.addAttribute("paiseditada", new Pais());
+        modelo.addAttribute("paiseditado", new Pais());
         return "pais";
     }
 
@@ -92,13 +92,12 @@ public class PaisControladorVista {
             pais = servicioPais.obtener(id, usuario);
         }
 
-        modelo.addAttribute("listapaises", servicioPais.getLista());
-        modelo.addAttribute("paiseditada", pais);
+        modelo.addAttribute("paiseditado", pais);
         return "paiseditar";
     }
 
     @PostMapping("/guardar")
-    public String guardar(@ModelAttribute("paiseditada") Pais pais, HttpSession sesion) {
+    public String guardar(@ModelAttribute("paiseditado") Pais pais, HttpSession sesion) {
         Usuario usuario = (Usuario) sesion.getAttribute("usuario");
         pais = servicioPais.guardar(pais, usuario);
         servicioPais.listar(usuario);
@@ -116,7 +115,7 @@ public class PaisControladorVista {
         if (servicioPais.eliminar(id, usuario)) {
             servicioPais.listar(usuario);
         } else {
-            redirectAttributes.addFlashAttribute("mensajeerror", "No se pudo eliminar la Pais");
+            redirectAttributes.addFlashAttribute("mensajeerror", "No se pudo eliminar el Pais");
         }
         int pagina = (int) sesion.getAttribute("numeroPaginaActual");
         String ruta = "redirect:/pais/listar/" + pagina + "/" + InicioControladorVista.TAMAÑO_PAGINA;
