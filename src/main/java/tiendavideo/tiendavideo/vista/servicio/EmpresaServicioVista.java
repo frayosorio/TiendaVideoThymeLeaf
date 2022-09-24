@@ -25,7 +25,8 @@ import tiendavideo.tiendavideo.modelo.*;
 @Service
 public class EmpresaServicioVista {
 
-    private String urlBase = "http://localhost:8080/empresas";
+    //private String urlBase = "http://localhost:8080/empresas";
+    private String urlBase = "https://tiendavideomintic.herokuapp.com/empresas";
 
     private List<Empresa> empresas;
 

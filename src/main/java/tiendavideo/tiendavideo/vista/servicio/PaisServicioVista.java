@@ -17,7 +17,8 @@ import tiendavideo.tiendavideo.modelo.*;
 @Service
 public class PaisServicioVista {
     
-    private String urlBase = "http://localhost:8080/paises";
+    //private String urlBase = "http://localhost:8080/paises";
+    private String urlBase = "https://tiendavideomintic.herokuapp.com/paises";
 
     private List<Pais> paises;
 
