@@ -25,6 +25,11 @@ public class PaisControlador {
         return repositorio.findById(id).get();
     }
 
+    @RequestMapping(value = "/buscar/{nombre}", method = RequestMethod.GET)
+    public List<Pais> buscar(@PathVariable String nombre) {
+        return repositorio.buscar(nombre);
+    }
+
     @RequestMapping(value = "/agregar", method = RequestMethod.POST)
     public Pais crear(@RequestBody Pais pais) {
         return repositorio.save(pais);

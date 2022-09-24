@@ -1,12 +1,9 @@
 package tiendavideo.tiendavideo.vista.servicio;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.IntStream;
-
-import javax.swing.text.html.FormSubmitEvent.MethodType;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -65,6 +62,18 @@ public class EmpresaServicioVista {
         Page<Empresa> empresasPage = new PageImpl<Empresa>(lista, PageRequest.of(paginaActual, tamañoPagina),
                 empresas.size());
         return empresasPage;
+    }
+
+    public void buscar(String dato, Usuario usuario) {
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = obtenerHeader(usuario);
+
+        HttpEntity<String> request = new HttpEntity<String>(headers);
+
+        String urlT = urlBase + "/buscar/" + dato;
+        ResponseEntity<Empresa[]> response = restTemplate.exchange(urlT, HttpMethod.GET, request, Empresa[].class);
+
+        empresas = Arrays.asList(response.getBody());
     }
 
     public Empresa guardar(Empresa empresa, Usuario usuario) {

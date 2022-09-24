@@ -8,12 +8,11 @@
             <b class="titulo" th:text="#{Diseño.Titulo}"></b>
         </div>
         <div th:if="${session.usuario==null}">
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#login">
-                Login
-            </button>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#login"
+            th:text="#{Diseño.Login.BotonIngresar}"></button>
         </div>
         <div th:if="${session.usuario!=null}">
-            <a href="/logout" class="btn btn-primary">Logout</a>
+            <a href="/logout" class="btn btn-primary" th:text="#{Diseño.Login.BotonSalir}"></a>
         </div>
     </div>
 </nav>

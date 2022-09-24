@@ -1,0 +1,40 @@
+<nav id="paiseditar" th:fragment="modulo-paiseditar" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" th:if="${paiseditado.id>0}" th:text="'Editando '+${paiseditado.pais}"></h5>
+                <h5 class="modal-title" th:if="${paiseditado.id==0}" th:text="#{Diseño.Paises.TituloAgregando}"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form th:action="@{/pais/guardar}" th:object="${paiseditado}" method="POST">
+                <div class="modal-body">
+                    <div class="form-group" style="width:100%">
+                        <label th:text="#{Diseño.Paises.TituloCampo1}" />
+                        <input class="form-control" type="number" th:field="*{id}" name="id" id="id">
+                    </div>
+                    <div class="form-group" style="width:100%">
+                        <label th:text="#{Diseño.Paises.TituloCampo2}" />
+                        <input class="form-control" type="text" th:field="*{pais}" name="pais" id="pais">
+                    </div>
+                    <div class="form-group" style="width:100%">
+                        <label th:text="#{Diseño.Paises.TituloCampo3}" />
+                        <input class="form-control" type="text" th:field="*{codigoalfa2}" name="codigoalfa2"
+                            id="codigoalfa2">
+                    </div>
+                    <div class="form-group" style="width:100%">
+                        <label th:text="#{Diseño.Paises.TituloCampo4}" />
+                        <input class="form-control" type="text" th:field="*{codigoalfa3}" name="codigoalfa3"
+                            id="codigoalfa3">
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</nav>

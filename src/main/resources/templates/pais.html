@@ -1,0 +1,80 @@
+<nav id="modulopais" th:fragment="modulo-pais">
+    <h2><b th:text="#{Diseño.Paises.Titulo}"></b></h2>
+
+    <div th:insert="paiseditar :: modulo-paiseditar"> </div>
+    <div th:insert="decidir :: modulo-decidir"> </div>
+
+    <input type="text" id="dato">
+    <button type="submit" class="btn btn-primary" id="buscar" th:text="#{Diseño.Paises.BotonBuscar}"></button>
+
+    <table id="datagridPaises" class="table table-striped table-bordered table-responsive" style="width: 100%">
+        <thead class="thead-dark">
+            <th th:text="#{Diseño.Paises.TituloCampo1}" />
+            <th th:text="#{Diseño.Paises.TituloCampo2}" />
+            <th th:text="#{Diseño.Paises.TituloCampo3}" />
+            <th th:text="#{Diseño.Paises.TituloCampo4}" />
+            <th>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#paiseditar" data-id="0"
+                    th:text="#{Diseño.Paises.BotonAgregar}"> </button>
+            </th>
+        </thead>
+        <tbody>
+            <tr th:each="pais, tipoFila : ${paginaActual.content}" th:style="${tipoFila.odd}? 'font-weight: bold;'">
+                <td th:text="${pais.id}" />
+                <td th:text="${pais.pais}" />
+                <td th:text="${pais.codigoalfa2}" />
+                <td th:text="${pais.codigoalfa3}" />
+                <td>
+                    <button class="btn btn-primary" data-toggle="modal" data-target="#paiseditar"
+                        th:data-id="${pais.id}">
+                        <i class="fa fa-edit"></i>
+                    </button>
+                    <button class="btn btn-danger" data-toggle="modal" data-target="#decidir"
+                        th:attr="data-ruta='/pais/eliminar/'+${pais.id}">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <nav aria-label="Area de navegacion">
+        <div th:if="${paginaActual.totalPages>0}">
+            <ul class="pagination">
+                <li th:each="numeroPagina: ${numerosPaginas}">
+                    <span class="page-item" th:classappend="${numeroPagina==paginaActual.number + 1}? active">
+                        <a class="page-item" th:href="@{'/pais/listar/'+${numeroPagina}+'/'+${paginaActual.size}}"
+                            th:text=${numeroPagina} th:class="page-link"></a>
+                    </span>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <script>
+        $("#paiseditar").on("show.bs.modal", function (event) {
+            var id = $(event.relatedTarget).data("id");
+            $.get("/pais/editar/" + id, function (data) {
+                var modal = $(data);
+                var contenidoModal = modal.find(".modal-content");
+                $("#paiseditar").find(".modal-content").html(contenidoModal);
+            });
+        });
+
+        $("#decidir").on("show.bs.modal", function (event) {
+            var ruta = $(event.relatedTarget).data("ruta");
+            $("#decidir").find("#btnAceptar").attr("href", ruta);
+        });
+
+        $('#buscar').on('click', function (event) {
+            var dato = $('#dato').val();
+            $.get('/pais/buscar?dato=' + dato, function (data) {
+                var pais = $(data);
+                var contenido = pais.html();
+                //window.alert(contenido);
+                $('#modulopaises').html(contenido);
+                location.reload();
+            });
+        });
+
+    </script>
+</nav>
