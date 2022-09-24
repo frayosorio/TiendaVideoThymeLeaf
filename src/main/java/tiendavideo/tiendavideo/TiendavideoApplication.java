@@ -31,7 +31,7 @@ public class TiendavideoApplication {
 					.addFilterAfter(new FiltroSeguridad(), UsernamePasswordAuthenticationFilter.class)
 					.authorizeRequests()
 					.antMatchers(HttpMethod.GET, "/usuarios/login").permitAll()
-					.antMatchers("/", "/menu/**", "/empresa/**").permitAll()
+					.antMatchers("/", "/menu/**", "/empresa/**", "/login").permitAll()
 					.antMatchers("/webjars/**", "/resources/**", "/css/**", "/js/**", "/imagenes/**").permitAll()
 					.anyRequest().authenticated();
 		}

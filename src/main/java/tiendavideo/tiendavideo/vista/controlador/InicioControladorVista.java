@@ -3,17 +3,20 @@ package tiendavideo.tiendavideo.vista.controlador;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import tiendavideo.tiendavideo.modelo.Usuario;
 import tiendavideo.tiendavideo.util.ItemMenu;
+import tiendavideo.tiendavideo.util.Login;
 import tiendavideo.tiendavideo.vista.servicio.UsuarioServicioVista;
 
 @Controller
@@ -44,16 +47,10 @@ public class InicioControladorVista {
     }
 
     @GetMapping("/")
-    public String inicio(Model modelo, HttpSession sesion) {
-        Usuario usuario = (Usuario) sesion.getAttribute("usuario");
-        if (usuario == null) {
-            usuario = usuarioServicio.login("FRAY", "123");
-            sesion.setAttribute("usuario", usuario);
-        }
-
+    public String inicio(Model modelo) {
         modelo.addAttribute("menu", generarMenu());
         modelo.addAttribute("plantilla", "presentacion");
-
+        modelo.addAttribute("login", new Login());
         return "inicio";
     }
 
@@ -61,6 +58,19 @@ public class InicioControladorVista {
     public String seleccionarMenu(@PathVariable String opcion) {
         String ruta = "redirect:/" + opcion + "/listar/1/" + TAMAÑO_PAGINA;
         return ruta;
+    }
+
+    @GetMapping("/login")
+    public String login(@ModelAttribute("login") Login login, HttpServletRequest request) {
+        Usuario usuario = usuarioServicio.login(login.getUsuario(), login.getClave());
+        request.getSession().setAttribute("usuario", usuario);
+        return "redirect:/";
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request) {
+        request.getSession().setAttribute("usuario", null);
+        return "redirect:/";
     }
 
 }

@@ -17,12 +17,17 @@
 </head>
 
 <body>
+    <div th:insert="login :: modulo-login"></div>
+
     <header>
         <div th:insert="barraprincipal :: barraprincipal"></div>
     </header>
     <div class="wrapper">
         <div th:insert="menulateral :: menu-lateral"></div>
         <div id="contenido">
+            <div th:if="${mensajeerror}">
+                <div class="error" th:text="${mensajeerror}"></div>       
+            </div>
             <div th:replace="${plantilla} :: 'modulo-'+${plantilla}" />
         </div>
     </div>

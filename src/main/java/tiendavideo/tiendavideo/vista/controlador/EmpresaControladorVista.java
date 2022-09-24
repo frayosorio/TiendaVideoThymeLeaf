@@ -17,10 +17,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import tiendavideo.tiendavideo.modelo.Empresa;
-import tiendavideo.tiendavideo.modelo.Pais;
 import tiendavideo.tiendavideo.modelo.Usuario;
+import tiendavideo.tiendavideo.util.Login;
 import tiendavideo.tiendavideo.vista.servicio.EmpresaServicioVista;
 import tiendavideo.tiendavideo.vista.servicio.PaisServicioVista;
 
@@ -46,10 +47,15 @@ public class EmpresaControladorVista {
                     .collect(Collectors.toList());
 
             modelo.addAttribute("numerosPaginas", numerosPaginas);
+            modelo.addAttribute("plantilla", "empresa");
         }
-        modelo.addAttribute("plantilla", "empresa");
+        else{
+            modelo.addAttribute("plantilla", "presentacion");
+            modelo.addAttribute("mensajeerror", "usuario no logueado");
+        } 
         modelo.addAttribute("menu", InicioControladorVista.generarMenu());
         modelo.addAttribute("empresaeditada", new Empresa());
+        modelo.addAttribute("login", new Login());
         return "inicio";
     }
 

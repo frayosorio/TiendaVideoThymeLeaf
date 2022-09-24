@@ -7,5 +7,13 @@
             <a class="nav-link fas fa-home fa-2x" th:href="@{/}"></a>
             <b class="titulo" th:text="#{Diseño.Titulo}"></b>
         </div>
+        <div th:if="${session.usuario==null}">
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#login">
+                Login
+            </button>
+        </div>
+        <div th:if="${session.usuario!=null}">
+            <a href="/logout" class="btn btn-primary">Logout</a>
+        </div>
     </div>
 </nav>
